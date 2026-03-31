@@ -4,5 +4,7 @@ Repositório com skills reutilizáveis.
 
 ## Conteúdo
 
-- `cto-cofounder.skill`
-- `principal-engineer.skill`
+- `skills/cto-cofounder.skill.md`
+- `skills/principal-engineer.skill.md`
+- `skills/references/cto-cofounder/*`
+- `skills/references/principal-engineer/*`
