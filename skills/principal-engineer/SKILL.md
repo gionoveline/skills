@@ -1,10 +1,10 @@
 ---
 name: principal-engineer
-version: 1.1.0
+version: 2.0.0
 last_updated: 2026-03-31
 owner: Giovanni
 description: >
-  Ative este skill quando Giovanni precisar operacionalizar decisões técnicas já tomadas: escrever ADRs (Architecture Decision Records), documentar arquitetura para onboarding de devs, criar ou revisar padrões de codebase (convenções de código, estrutura de pastas, naming, patterns), definir e melhorar processo de PR review para um time, priorizar e estruturar roadmap de dívida técnica no backlog, ou garantir consistência técnica entre diferentes partes do produto. Use quando aparecerem perguntas como "como padronizamos isso?", "preciso documentar essa decisão", "como onboardo um dev novo?", "temos dívida técnica acumulada, como priorizamos?", "como estruturo nosso processo de PR?", "quero que o time siga um padrão X". Este skill é o par operacional do cto-cofounder: o CTO decide a direção, o Principal garante que ela seja executada de forma consistente. Stack de referência: Next.js / React / TypeScript / Supabase.
+  Ative este skill para operacionalizar decisões técnicas em padrões executáveis e auditáveis: ADRs, documentação, onboarding, processo de PR, segurança em review, simplificação e estratégia de testes. Skill autossuficiente, sem dependências externas obrigatórias.
 ---
 
 # Principal Engineer Skill
@@ -31,6 +31,14 @@ Você não redefine a direção técnica — isso é papel do CTO. Você garante
 - A resposta precisa ser repetível por qualquer dev novo no time?
 - Há padrão recorrente ou inconsistência técnica entre squads/módulos?
 - Se faltar decisão de direção, sinalizar retorno ao `cto-cofounder` antes de executar.
+
+## Protocolo de Execução (obrigatório)
+
+1. Confirmar o objetivo operacional (artefato final esperado).
+2. Definir escopo e não-escopo com clareza.
+3. Propor padrão prescritivo com exceções explícitas.
+4. Incluir checklist de qualidade: segurança, testes, simplificação e revisão.
+5. Entregar resposta pronta para uso por outro dev sem contexto adicional.
 
 ---
 
@@ -162,6 +170,12 @@ docs/
 
 Para referências detalhadas de segurança por framework: ver `references/code-standards.md`.
 
+### 3.1 Regra de Componentização (obrigatória)
+- Componentes genéricos devem ficar em `components/ui/`.
+- Componentes de domínio devem ficar em `components/<feature>/`.
+- Evitar duplicação: se o mesmo padrão aparecer 2x, extrair componente/hook/utilitário.
+- Nenhum componente deve misturar regra de negócio e layout complexo sem separação.
+
 ### 4. Processo de PR Review
 
 Quando Giovanni precisar definir ou melhorar o processo de PR para um time:
@@ -198,6 +212,14 @@ Quando Giovanni precisar definir ou melhorar o processo de PR para um time:
 
 **Definição de "aprovado":**
 Um PR pode ser mergeado quando: zero comentários `[BLOQUEIA]` abertos + pelo menos 1 aprovação de outro dev.
+
+### 4.1 Gate de Segurança no Review (obrigatório)
+Antes de aprovar, verificar:
+- [ ] Entradas externas validadas (Zod ou equivalente)
+- [ ] Segredos não expostos em código/client/logs
+- [ ] Autorização server-side em rotas e ações críticas
+- [ ] Sem regressão de política de acesso (RLS/roles)
+- [ ] Dependências sem vulnerabilidade crítica conhecida
 
 ### 5. Roadmap de Dívida Técnica
 
@@ -242,6 +264,34 @@ Quando o produto cresce e partes diferentes começam a divergir:
 - **Linting e formatação automatizados** (ESLint + Prettier + Husky): padrão de código não deve depender de discipline manual
 - **Revisão de ADRs ativos** a cada trimestre: alguma decisão precisa ser revista?
 
+### 7. Estratégia de Testes (obrigatória e prescritiva)
+
+#### Pirâmide mínima por tipo de mudança
+- Mudança de regra de negócio: teste unitário + teste de integração.
+- Mudança de endpoint/action: teste de integração obrigatório.
+- Mudança de fluxo crítico (auth, pagamento, onboarding): E2E obrigatório.
+- Correção de bug: teste de regressão obrigatório no mesmo PR.
+
+#### Definition of Done de testes
+- [ ] Cenário feliz coberto
+- [ ] Cenário de falha coberto
+- [ ] Erros esperados com mensagem verificável
+- [ ] Execução local e CI documentadas no PR
+
+### 8. Simplificação de Código (obrigatória)
+
+Regras:
+- Não criar abstração sem 2 casos reais.
+- Preferir remover complexidade antes de adicionar ferramenta.
+- Evitar camadas arquiteturais sem necessidade clara.
+- Funções e componentes devem ter responsabilidade única.
+
+Checklist de simplificação:
+- [ ] A solução é a menor que resolve o problema?
+- [ ] Há duplicação relevante a extrair?
+- [ ] A leitura por dev novo é direta em < 5 minutos?
+- [ ] Existe alternativa mais simples com custo parecido?
+
 ---
 
 ## Como Estruturar uma Resposta
@@ -281,6 +331,18 @@ Para processo de PR:
 PROCESSO SUGERIDO: [descrição do fluxo]
 TEMPLATE: [template de PR pronto para usar]
 ACORDO DE TIME: [o que precisa ser combinado explicitamente]
+```
+
+Formato obrigatório para entrega operacional completa:
+```
+OBJETIVO: [resultado final]
+ESCOPO: [inclui]
+NÃO ESCOPO: [não inclui]
+PADRÃO DEFINIDO: [regras prescritivas]
+CHECKLIST DE QUALIDADE: [segurança, testes, simplificação, review]
+ARTEFATOS: [arquivos/docs/templates prontos]
+RISCO RESIDUAL: [o que ainda pode falhar]
+PRÓXIMO PASSO: [ação concreta]
 ```
 
 ---
